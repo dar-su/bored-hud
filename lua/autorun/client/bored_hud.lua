@@ -1316,6 +1316,7 @@ function BoHU.Draw3D()
 	local hi = BoHU.GetHUDInfo()
 	local P = LocalPlayer()
 	if !P:Alive() then return end
+	local dzz = (1 - GetConVar("boredhud_deadx"):GetFloat()) * ScrH()
 
 	local camcontrol = angle_zero
 	if IsValid(hi.pw) then
@@ -1331,7 +1332,7 @@ function BoHU.Draw3D()
     local anchorwidth = math.min(ScrW() / 2, ScrH() / 2)
 
     -- cam.Start3D(nil, nil, 55, 0, ScrH() - anchorwidth, anchorwidth, anchorwidth)
-    cam.Start3D(nil, EyeAngles() + camcontrol, 55, 0, 0, anchorwidth, anchorwidth)
+    cam.Start3D(nil, EyeAngles() + camcontrol, 55, dzz, 0, anchorwidth, anchorwidth)
 
     local ang = EyeAngles()
 
@@ -1403,7 +1404,7 @@ function BoHU.Draw3D()
 
 
 	
-    cam.Start3D(nil, EyeAngles() + camcontrol, 55, ScrW() - anchorwidth, 0, anchorwidth, anchorwidth)
+    cam.Start3D(nil, EyeAngles() + camcontrol, 55, ScrW() - anchorwidth - dzz, 0, anchorwidth, anchorwidth)
 	ang = EyeAngles()
 
     ang:RotateAroundAxis(up, 155)

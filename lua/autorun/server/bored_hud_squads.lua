@@ -1,24 +1,25 @@
 
-if !game.SinglePlayer() then return end
+if game.SinglePlayer() then
+    util.AddNetworkString("BoHU_SquadInfo")
 
-util.AddNetworkString("BoHU_SquadInfo")
-util.AddNetworkString("BoHU_KF_Kill")
+    local sinfo = sinfo or {}
 
-local sinfo = sinfo or {}
-
-local function SendSquadInfo( dnc )
-    local csinfo = ai.GetSquadMembers( "player_squad" )
-    if !csinfo then return end
-    
-    if dnc or (table.ToString(csinfo) != table.ToString(sinfo)) then -- LOL
-        net.Start("BoHU_SquadInfo")
-            net.WriteTable(csinfo)
-        net.Broadcast()
-        sinfo = csinfo
+    local function SendSquadInfo( dnc )
+        local csinfo = ai.GetSquadMembers( "player_squad" )
+        if !csinfo then return end
+        
+        if dnc or (table.ToString(csinfo) != table.ToString(sinfo)) then -- LOL
+            net.Start("BoHU_SquadInfo")
+                net.WriteTable(csinfo)
+            net.Broadcast()
+            sinfo = csinfo
+        end
     end
+    net.Receive("BoHU_SquadInfo", function() SendSquadInfo(true) end)
+    hook.Add("Think", "BoHU_SquadInfo", function() SendSquadInfo(false) end)
 end
-net.Receive("BoHU_SquadInfo", function() SendSquadInfo(true) end)
-hook.Add("Think", "BoHU_SquadInfo", function() SendSquadInfo(false) end)
+
+util.AddNetworkString("BoHU_KF_Kill")
 
 local kf_lastheadshottime = 0
 
@@ -27,9 +28,10 @@ local function kfkill(ent, inflictor, attacker)
     net.WriteEntity(attacker)
     net.WriteString(ent:IsPlayer() and ent:Name() or ent:GetClass())
     net.WriteBool(kf_lastheadshottime == CurTime())
+    if ent == attacker then inflictor = attacker end
     net.WriteString((inflictor and inflictor != attacker) and (inflictor.PrintName and inflictor.PrintName or inflictor:GetClass()) or "") -- it wont exist on client when net will arrive
     net.WriteUInt(ent:IsPlayer() and ent:Team() or 255, 8)
-    net.WriteBool(ent==inflictor)
+    net.WriteBool(ent == inflictor)
     net.Broadcast()
 end
 

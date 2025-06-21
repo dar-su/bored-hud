@@ -420,7 +420,7 @@ function BoHU.GetHUDInfo()
 				-- what's your fuckin problem
 
 			if GetConVar("boredhud_enable_ammo_trivia"):GetBool() then
-				if PW:GetValue("EFTRoundName") then info.wp_ammoname = string.Replace(string.upper(PW:GetValue("EFTRoundName")), " GZH", "")
+				if PW:GetValue("EFTRoundName") then info.wp_ammoname = string.Replace(string.Replace(string.upper(PW:GetValue("EFTRoundName")), " GZH", ""), " гж", "")
 				elseif PW.Trivia.Calibre then info.wp_ammoname = PW.Trivia.Calibre
 				elseif PW.Trivia.Caliber then info.wp_ammoname = PW.Trivia.Caliber
 				elseif PW.Trivia.Calibre2 then info.wp_ammoname = PW.Trivia.Calibre2
@@ -834,8 +834,8 @@ hook.Add( "HUDPaint", "BoHU_HUDShouldDraw", function()
 		local jump = 0
 		if hi.wp_ammoname and hi.wp_ammoname != NA then
 			local ammoname = hi.wp_ammoname
-			if string.len(ammoname) > 14 then
-				ammoname = string.Left(ammoname, 14 )..".."
+			if string.len(ammoname) > 16 then
+				ammoname = string.Left(ammoname, 16 )..".."
 			end
 			surface.SetFont("BoHU_8")
 			BoHU.Text(string.upper(ammoname), {2, 1}, hi.scrw_g + hi.scrw - sm(96), hi.scrh_g + hi.scrh - sm(22) )
@@ -907,8 +907,8 @@ hook.Add( "HUDPaint", "BoHU_HUDShouldDraw", function()
 			local jump = 0
 			local ammoname = hi.wp_ammoname2
 			if ammoname != NA then
-				if string.len(ammoname) > 14 then
-					ammoname = string.Left(ammoname, 14 )..".."
+				if string.len(ammoname) > 16 then
+					ammoname = string.Left(ammoname, 16 )..".."
 				end
 				surface.SetFont("BoHU_8")
 				BoHU.Text(string.upper(ammoname), {2, 1}, hi.scrw_g + hi.scrw - sm(96*gaasc) - gaaaw, hi.scrh_g + hi.scrh - sm(22 - 6) - gaaah )
@@ -1501,8 +1501,8 @@ function BoHU.Draw3D()
 	
 			if hi.wp_ammoname and hi.wp_ammoname != NA then
 				local ammoname = hi.wp_ammoname
-				if string.len(ammoname) > 14 then
-					ammoname = string.Left(ammoname, 14 ) .. ".."
+				if string.len(ammoname) > 16 then
+					ammoname = string.Left(ammoname, 16 ) .. ".."
 				end
 				surface.SetFont("BoHU_8")
 				BoHU.Text(string.upper(ammoname), {2, 1}, 88, hasthatubglorno and 50 or 60 )
